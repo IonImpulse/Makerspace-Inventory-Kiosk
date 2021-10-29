@@ -111,9 +111,15 @@ function createSearcher(inventory) {
 
 async function prepareInventory() {
     let sheets = await getSheets();
-    let normalized_inventory = normalizeInventory(sheets.materials, sheets.tools);
+    
+    if (sheets != null) {
+        let normalized_inventory = normalizeInventory(sheets.materials, sheets.tools);
 
-    global_inventory = createSearcher(normalized_inventory);
+        global_inventory = createSearcher(normalized_inventory);
+
+        localStorage.setItem("inventory", JSON.stringify(global_inventory));
+    }   
+
 }
 
 function update_loop() {
@@ -137,7 +143,13 @@ function replaceHtml(el, html) {
 };
 
 function asSimpleDate(date) {
-    return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+    let actual_date;
+    if (typeof(date) == "string") {
+        actual_date = new Date(date);
+    } else {
+        actual_date = date;
+    }
+    return `${actual_date.getMonth() + 1}/${actual_date.getDate()}/${actual_date.getFullYear()}`;
 }
 
 function updateResults() {
@@ -145,7 +157,7 @@ function updateResults() {
     let output = document.getElementById("search-results");
 
     let results = [];
-    let query = input.value;
+    let query = input.value.trim();
 
     if (query.length == 0) {
         results = global_inventory;
@@ -170,7 +182,7 @@ function updateResults() {
     }
 
     let items_html = `
-    <div class="result header">
+    <div class="result row header">
         <div class="result name">Name</div>
         <div class="result category">Category</div>
         <div class="result location">Location</div>
@@ -182,7 +194,7 @@ function updateResults() {
 
     for (let result of results) {
         let item_html = `
-            <div class="result">
+            <div class="result row">
                 <div class="result name">${result.name ?? result.obj.name}</div>
                 <div class="result category">${result.category ?? result.obj.category}</div>
                 <div class="result location">${result.location ?? result.obj.location}</div>
@@ -206,7 +218,16 @@ async function startup() {
     console.log("Starting up...");
     document.getElementById("search-input").focus();
 
-    await prepareInventory();
+    let inventory_promise = prepareInventory();
+
+    let inventory = JSON.parse(localStorage.getItem("inventory"));
+
+    if (inventory != null) {
+        global_inventory = inventory;
+    } else {
+        await inventory_promise;
+    }
+    
     console.log("Inventory prepared");
 
     updateResults();
