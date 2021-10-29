@@ -76,18 +76,6 @@ function normalizeInventory(materials, tools) {
 
     let inventory = [];
 
-    for (let i = 0; i < materials.data.length; i++) {
-        inventory.push({
-            name: capitalize(materials.data[i]["General Name"]),
-            specific_name: materials.data[i]["Specific Name / Brand"],
-            category: capitalize(materials.data[i]["Category"]),
-            quantity: capitalize(materials.data[i]["How many or high, medium, low inventory?"]),
-            last_checked: new Date(materials.data[i]["Last Checked by a Steward:"]) ?? "NA",
-            location: capitalize(materials.data[i]["Where to find it:"]),
-            condition: "NA",
-        });
-    }
-
     for (let i = 0; i < tools.data.length; i++) {
         inventory.push({
             name: capitalize(tools.data[i]["General Name"]),
@@ -97,6 +85,18 @@ function normalizeInventory(materials, tools) {
             last_checked: new Date(tools.data[i]["Last checked by steward"]) ?? "NA",
             location: capitalize(tools.data[i]["Where to find it:"]),
             condition: capitalize(tools.data[i]["Condition"]),
+        });
+    }
+
+    for (let i = 0; i < materials.data.length; i++) {
+        inventory.push({
+            name: capitalize(materials.data[i]["General Name"]),
+            specific_name: materials.data[i]["Specific Name / Brand"],
+            category: capitalize(materials.data[i]["Category"]),
+            quantity: capitalize(materials.data[i]["How many or high, medium, low inventory?"]),
+            last_checked: new Date(materials.data[i]["Last Checked by a Steward:"]) ?? "NA",
+            location: capitalize(materials.data[i]["Where to find it:"]),
+            condition: "NA",
         });
     }
 
@@ -171,24 +171,24 @@ function updateResults() {
 
     let items_html = `
     <div class="result header">
-        <div class="result-name">Name</div>
-        <div class="result-category">Category</div>
-        <div class="result-location">Location</div>
-        <div class="result-quantity">Quantity</div>
-        <div class="result-condition">Condition (if tool)</div>
-        <div class="result-last-checked">Last Checked</div>
+        <div class="result name">Name</div>
+        <div class="result category">Category</div>
+        <div class="result location">Location</div>
+        <div class="result quantity">Quantity</div>
+        <div class="result condition">Condition (if tool)</div>
+        <div class="result last-checked">Last Checked</div>
     </div>
     `;
 
     for (let result of results) {
         let item_html = `
             <div class="result">
-                <div class="result-name">${result.name ?? result.obj.name}</div>
-                <div class="result-category">${result.category ?? result.obj.category}</div>
-                <div class="result-location">${result.location ?? result.obj.location}</div>
-                <div class="result-quantity">${result.quantity ?? result.obj.quantity}</div>
-                <div class="result-condition">${result.condition ?? result.obj.condition}</div>
-                <div class="result-last-checked">${asSimpleDate(result.last_checked ?? result.obj.last_checked)}</div>
+                <div class="result name">${result.name ?? result.obj.name}</div>
+                <div class="result category">${result.category ?? result.obj.category}</div>
+                <div class="result location">${result.location ?? result.obj.location}</div>
+                <div class="result quantity">${result.quantity ?? result.obj.quantity}</div>
+                <div class="result condition">${result.condition ?? result.obj.condition}</div>
+                <div class="result last-checked">${asSimpleDate(result.last_checked ?? result.obj.last_checked)}</div>
             </div>
         `;
 
@@ -198,8 +198,14 @@ function updateResults() {
     replaceHtml(output, items_html);
 }
 
+function requestItem() {
+    window.open("https://docs.google.com/forms/d/e/1FAIpQLSdTW_DD2_LnClS0X5jmzhL5NPRNpkJImFQtGaXf0l30mCqRsQ/viewform");
+}
+
 async function startup() {
     console.log("Starting up...");
+    document.getElementById("search-input").focus();
+
     await prepareInventory();
     console.log("Inventory prepared");
 
