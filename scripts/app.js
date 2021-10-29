@@ -113,6 +113,7 @@ async function prepareInventory() {
     let sheets = await getSheets();
     
     if (sheets != null) {
+        console.log("Data found! Updating localstorage...");
         let normalized_inventory = normalizeInventory(sheets.materials, sheets.tools);
 
         global_inventory = createSearcher(normalized_inventory);
@@ -124,7 +125,9 @@ async function prepareInventory() {
 
 function update_loop() {
     setTimeout(function () {
+        console.log("Updating...");
         prepareInventory();
+        update_loop();
     }, 120000)
 }
 
@@ -208,6 +211,7 @@ function updateResults() {
     }
 
     replaceHtml(output, items_html);
+    document.getElementById("results-box").scroll({ top: 0, behavior: 'smooth' });
 }
 
 function requestItem() {
