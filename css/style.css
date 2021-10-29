@@ -1,0 +1,76 @@
+:root {
+--hmc-color-primary: #EAAA00;
+--hmc-color-secondary: #000000;
+--background-main: #FFFFFF;
+--background-secondary: #e2e2e2;
+--main-font: "Roboto";
+--mono-font: "Roboto Mono";
+}
+
+body * {
+font-family: var(--main-font);
+}
+
+#results-box {
+height: 80vh;
+overflow-y: scroll;
+}
+
+#search-results {
+font-family: var(--mono-font);
+margin: 0 auto;
+}
+
+.result {
+display: table-row;
+align-items: center;
+}
+
+.result * {
+display: table-cell;
+}
+
+.result.header {
+font-weight: 500;
+}
+
+.result-name {
+width: 15vw;
+}
+
+.result-category {
+width: 10vw;
+}
+
+.result-location {
+width: 10vw;
+}
+
+.result-quantity {
+width: 10vw;
+}
+
+.result-condition {
+width: 10vw;
+}
+
+.result-last-checked {
+width: 10vw;
+}
+
+
+#search-box {
+margin: 0 auto;
+display: flex;
+align-items: center;
+margin-top: 30px;
+margin-bottom: 30px;
+}
+
+#search-input {
+margin: 0 auto;
+width: 50vw;
+height: 60px;
+font-size: 32px;
+font-weight: 500;
+}
