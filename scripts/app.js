@@ -1,27 +1,22 @@
 var global_inventory = [];
 
-const sheet_key = "1P-jAXBjs5J_9Z3R_aN6KGWhB2OzlA5WJaRZbL1nHSFw";
-const sheet_ids = [62212422, 363871847];
+const materials_url = `https://docs.google.com/spreadsheets/d/e/2PACX-1vRlpOHqojslmCaRAX-eeLSsteaBUiAwQN-5koJdnJBF6CzSzYPd9gp_wdEJHYwhcRlIZLMQtuT4WurI/pub?gid=62212422&single=true&output=csv`;
+const tools_url = `https://docs.google.com/spreadsheets/d/e/2PACX-1vRlpOHqojslmCaRAX-eeLSsteaBUiAwQN-5koJdnJBF6CzSzYPd9gp_wdEJHYwhcRlIZLMQtuT4WurI/pub?gid=363871847&single=true&output=csv`;
 
 const options = {
     limit: 100, // don't return more results than you need!
     allowTypo: true, // if you don't care about allowing typos
     threshold: -10000, // don't return bad results
     keys: ['name', 'specific_name', 'category',], // keys to search
-}
-
-function get_sheet_url(key, id) {
-    return `https://docs.google.com/spreadsheets/d/${key}/export?format=csv&gid=${id}`
-}
-
+};
 
 async function getSheets() {
     console.log("Getting sheets...");
 
-    const material_response = await fetch(get_sheet_url(sheet_key, sheet_ids[0]));
+    const material_response = await fetch(materials_url);
     const material_data = await material_response.text();
 
-    const tool_response = await fetch(get_sheet_url(sheet_key, sheet_ids[1]));
+    const tool_response = await fetch(tools_url);
     const tool_data = await tool_response.text();
 
     const materials = Papa.parse(material_data, {
