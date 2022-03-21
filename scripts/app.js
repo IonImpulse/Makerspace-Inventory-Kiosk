@@ -122,6 +122,7 @@ function update_loop() {
     setTimeout(function () {
         console.log("Updating...");
         prepareInventory();
+        updateResults();
         update_loop();
     }, 120000)
 }
@@ -141,6 +142,10 @@ function replaceHtml(el, html) {
 };
 
 function asSimpleDate(date) {
+    if (date === "NA") {
+        return "NA";
+    }
+
     let actual_date;
     if (typeof(date) == "string") {
         actual_date = new Date(date);
@@ -191,6 +196,13 @@ function updateResults() {
     `;
 
     for (let result of results) {
+        let last_checked;
+        if (result.obj == undefined) {
+            last_checked = result.last_checked ?? "NA";
+        } else {
+            last_checked = result.obj.last_checked ?? "NA";
+        }
+
         let item_html = `
             <div class="result row">
                 <div class="result name">${result.name ?? result.obj.name}</div>
@@ -198,7 +210,7 @@ function updateResults() {
                 <div class="result location">${result.location ?? result.obj.location}</div>
                 <div class="result quantity">${result.quantity ?? result.obj.quantity}</div>
                 <div class="result condition">${result.condition ?? result.obj.condition}</div>
-                <div class="result last-checked">${asSimpleDate(result.last_checked ?? result.obj.last_checked)}</div>
+                <div class="result last-checked">${asSimpleDate(last_checked) ?? "NA"}</div>
             </div>
         `;
 
@@ -229,9 +241,9 @@ async function startup() {
     
     console.log("Inventory prepared");
 
-    updateResults();
-
     update_loop();
+
+    updateResults();
 }
 
 startup();
