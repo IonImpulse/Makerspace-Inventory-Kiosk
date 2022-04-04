@@ -9,14 +9,13 @@
 
 body * {
 font-family: var(--main-font);
+background-color: white;
 }
 
 #results-box {
-height: 80vh;
 overflow-y: scroll;
 border: 2px solid var(--background-secondary);
 border-radius: 20px;
-width: 70%;
 margin: 0 auto;
 }
 
